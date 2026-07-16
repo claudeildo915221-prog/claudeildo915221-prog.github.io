@@ -14,6 +14,7 @@
   --other:#eef2f7;
 }
 * { box-sizing:border-box; }
+[hidden] { display:none !important; }
 body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.5; }
 header, main { width:min(1220px, calc(100% - 32px)); margin:0 auto; }
 header { padding:30px 0 16px; }
@@ -76,6 +77,9 @@ input, select { width:100%; padding:0 12px; }
 .hero-panel { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px; margin-bottom:14px; background:linear-gradient(135deg,#fff 0%,#f8fafc 58%,#eef4ff 100%); }
 .hero-panel p { max-width:760px; margin:0; color:var(--muted); }
 .home-cards .card p { margin:8px 0 0; }
+.login-panel { margin-bottom:14px; }
+.login-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:10px; align-items:end; }
+.login-message { grid-column:1 / -1; min-height:1.4em; }
 .character-toolbar { margin-bottom:14px; }
 .character-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; padding-bottom:34px; }
 .character-card { border:1px solid var(--line); border-radius:8px; background:#fff; overflow:hidden; }
@@ -151,6 +155,11 @@ pre { max-height:360px; margin:8px 0 0; padding:12px; overflow:auto; border:1px 
 .game-team-summary { display:grid; gap:8px; }
 .game-team-summary article { padding:10px; border:1px solid var(--line); border-radius:8px; background:#fff; }
 .game-team-summary span { display:block; color:var(--muted); font-size:.88rem; }
+.multi-seat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; }
+.multi-seat { padding:12px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+.multi-seat strong, .multi-seat span { display:block; }
+.multi-seat.is-occupied { border-color:color-mix(in srgb,var(--accent) 28%,var(--line)); background:#f8fbff; }
+.multi-seat.is-me { box-shadow:0 0 0 3px rgba(11,92,173,.1); }
 .game-mode-panel { display:grid; gap:10px; }
 .game-join-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; }
 .game-primary { background:#0b5cad; color:#fff; border-color:#0b5cad; font-weight:800; }
@@ -218,6 +227,7 @@ pre { max-height:360px; margin:8px 0 0; padding:12px; overflow:auto; border:1px 
   .pager-jump input { flex:1 1 76px; width:auto; }
   .actions a, .actions button { flex:1 1 auto; }
   .hero-panel { flex-direction:column; padding:16px; }
+  .login-grid { grid-template-columns:1fr; }
   .character-grid { grid-template-columns:1fr; gap:10px; }
   .character-card-head { flex-direction:column; }
   .character-stat { width:100%; }

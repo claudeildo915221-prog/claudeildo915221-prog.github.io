@@ -1,0 +1,17 @@
+{
+  "name": "boncatta-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "mobile:prepare": "node tools/prepare-mobile.mjs",
+    "cap:add:android": "npm run mobile:prepare && cap add android",
+    "cap:sync": "npm run mobile:prepare && cap sync android",
+    "apk:debug": "node tools/build-apk.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.4.2",
+    "@capacitor/cli": "8.4.2",
+    "@capacitor/core": "8.4.2"
+  }
+}

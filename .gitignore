@@ -1,0 +1,16 @@
+node_modules/
+www/
+
+.server.pid
+.playwright-cli/
+
+android/.gradle/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+android/app/src/main/assets/public/
+android/app/build/
+android/build/
+*.apk
+*.aab
+*.keystore
+*.jks
