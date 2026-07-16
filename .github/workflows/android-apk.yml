@@ -62,6 +62,8 @@ jobs:
           VERSION_NAME: 1.1.${{ github.run_number }}
         run: |
           APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+          mkdir -p dist
+          cp "$APK_PATH" dist/boncatta.apk
           NOTES_FILE="$(mktemp)"
           cat > "$NOTES_FILE" <<EOF
           {"versionCode":${VERSION_CODE},"versionName":"${VERSION_NAME}","commit":"${GITHUB_SHA}","builtAt":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
@@ -71,7 +73,7 @@ jobs:
           else
             gh release create apk-latest --target "$GITHUB_SHA" --title "Boncatta APK ${VERSION_NAME}" --notes-file "$NOTES_FILE" --latest
           fi
-          gh release upload apk-latest "$APK_PATH#boncatta.apk" --clobber
+          gh release upload apk-latest dist/boncatta.apk --clobber
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
