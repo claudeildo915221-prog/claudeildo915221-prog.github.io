@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 def boncattaVersionCode = (System.getenv("GITHUB_RUN_NUMBER") ?: "2").toInteger()
-def boncattaVersionName = System.getenv("BONCATTA_VERSION_NAME") ?: "1.1.${boncattaVersionCode}"
+def boncattaVersionName = System.getenv("BONCATTA_VERSION_NAME") ?: "v0.0.0"
 
 android {
     namespace = "io.github.boncatta.baota"

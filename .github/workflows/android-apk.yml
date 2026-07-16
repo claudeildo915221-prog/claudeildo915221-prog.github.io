@@ -50,6 +50,8 @@ jobs:
         run: npm run cap:sync
 
       - name: Build debug APK
+        env:
+          BONCATTA_VERSION_NAME: v0.0.0
         run: |
           chmod +x android/gradlew
           cd android
@@ -59,24 +61,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION_CODE: ${{ github.run_number }}
-          VERSION_NAME: 1.1.${{ github.run_number }}
+          VERSION_NAME: v0.0.0
         run: |
           APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
           mkdir -p dist
-          cp "$APK_PATH" dist/boncatta.apk
+          APK_FILE="boncatta-${VERSION_NAME}.apk"
+          cp "$APK_PATH" "dist/${APK_FILE}"
+          echo "APK_FILE=${APK_FILE}" >> "$GITHUB_ENV"
           NOTES_FILE="$(mktemp)"
           cat > "$NOTES_FILE" <<EOF
-          {"versionCode":${VERSION_CODE},"versionName":"${VERSION_NAME}","commit":"${GITHUB_SHA}","builtAt":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          {"versionCode":${VERSION_CODE},"versionName":"${VERSION_NAME}","apkFile":"${APK_FILE}","commit":"${GITHUB_SHA}","builtAt":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
           EOF
           if gh release view apk-latest >/dev/null 2>&1; then
             gh release edit apk-latest --title "Boncatta APK ${VERSION_NAME}" --notes-file "$NOTES_FILE" --latest
           else
             gh release create apk-latest --target "$GITHUB_SHA" --title "Boncatta APK ${VERSION_NAME}" --notes-file "$NOTES_FILE" --latest
           fi
-          gh release upload apk-latest dist/boncatta.apk --clobber
+          gh release view apk-latest --json assets --jq '.assets[].name' | while read -r asset; do
+            if [[ "$asset" == *.apk && "$asset" != "$APK_FILE" ]]; then
+              gh release delete-asset apk-latest "$asset" -y || true
+            fi
+          done
+          gh release upload apk-latest "dist/${APK_FILE}" --clobber
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: boncatta-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: boncatta-v0.0.0-apk
+          path: dist/boncatta-v0.0.0.apk

@@ -168,7 +168,12 @@
     const json = body.match(/\{[\s\S]*\}/)?.[0] || "{}";
     let meta = {};
     try { meta = JSON.parse(json); } catch { meta = {}; }
-    const apk = (release?.assets || []).find((asset) => asset.name === "boncatta.apk") || (release?.assets || [])[0];
+    const assets = release?.assets || [];
+    const apk = assets.find((asset) => asset.name === meta.apkFile)
+      || assets.find((asset) => /^boncatta-.*\.apk$/i.test(asset.name || ""))
+      || assets.find((asset) => asset.name === "boncatta.apk")
+      || assets.find((asset) => /\.apk$/i.test(asset.name || ""))
+      || assets[0];
     return {
       versionCode: Number(meta.versionCode || 0),
       versionName: meta.versionName || release?.name || "未知",
