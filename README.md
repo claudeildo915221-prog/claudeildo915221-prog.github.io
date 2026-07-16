@@ -23,3 +23,5 @@ npm run apk:debug
 本地构建 APK 需要安装 JDK 和 Android SDK。构建成功后，调试包位于 `android/app/build/outputs/apk/debug/app-debug.apk`。
 
 也可以在 GitHub Actions 中运行 `Build Android APK`，构建完成后下载 `boncatta-debug-apk`。
+
+Android debug APK 使用仓库内固定调试签名；如果手机上装过早期临时签名包，需要先卸载一次，再安装新版。之后同一包名可以直接覆盖更新。

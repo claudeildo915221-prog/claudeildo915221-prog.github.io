@@ -1,14 +1,26 @@
 apply plugin: 'com.android.application'
 
+def boncattaVersionCode = (System.getenv("GITHUB_RUN_NUMBER") ?: "2").toInteger()
+def boncattaVersionName = System.getenv("BONCATTA_VERSION_NAME") ?: "1.1.${boncattaVersionCode}"
+
 android {
     namespace = "io.github.boncatta.baota"
     compileSdk = rootProject.ext.compileSdkVersion
+    signingConfigs {
+        boncattaDebug {
+            storeFile file("../boncatta-debug.p12")
+            storePassword "boncatta-debug"
+            keyAlias "boncatta-debug"
+            keyPassword "boncatta-debug"
+            storeType "pkcs12"
+        }
+    }
     defaultConfig {
         applicationId "io.github.boncatta.baota"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode boncattaVersionCode
+        versionName boncattaVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -17,6 +29,9 @@ android {
         }
     }
     buildTypes {
+        debug {
+            signingConfig signingConfigs.boncattaDebug
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
