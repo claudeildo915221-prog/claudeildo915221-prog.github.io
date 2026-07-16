@@ -54,7 +54,7 @@ jobs:
 
       - name: Build debug APK
         env:
-          BONCATTA_VERSION_NAME: v0.0.0
+          BONCATTA_VERSION_NAME: v0.0.${{ github.run_number }}
         run: |
           chmod +x android/gradlew
           cd android
@@ -64,7 +64,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION_CODE: ${{ github.run_number }}
-          VERSION_NAME: v0.0.0
+          VERSION_NAME: v0.0.${{ github.run_number }}
         run: |
           APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
           mkdir -p dist
@@ -90,5 +90,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: boncatta-v0.0.0-apk
-          path: dist/boncatta-v0.0.0.apk
+          name: boncatta-v0.0.${{ github.run_number }}-apk
+          path: dist/boncatta-v0.0.${{ github.run_number }}.apk
