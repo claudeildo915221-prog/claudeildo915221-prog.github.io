@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Boncatta</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #657086;
+      --line: #dbe3ef;
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --brand: #2f6fed;
+      --brand-dark: #214fa8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", "Segoe UI", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(47, 111, 237, 0.14), transparent 28rem),
+        linear-gradient(135deg, #f9fbff 0%, var(--bg) 100%);
+    }
+
+    main {
+      width: min(960px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      display: grid;
+      place-items: center;
+      padding: 56px 0;
+    }
+
+    .hero {
+      width: 100%;
+      padding: clamp(28px, 6vw, 64px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 24px 70px rgba(30, 52, 91, 0.12);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: var(--brand-dark);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(44px, 9vw, 84px);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    p {
+      max-width: 660px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2.4vw, 22px);
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--card);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .button.primary {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    footer {
+      margin-top: 34px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero" aria-labelledby="title">
+      <div class="eyebrow">独立 GitHub Pages 站点</div>
+      <h1 id="title">Boncatta</h1>
+      <p>这里是 Boncatta 的独立站点，不使用 piglin.me 的仓库和域名配置。后续内容会在这个项目站里继续扩展。</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/gao-yi-fei/Boncatta">查看仓库</a>
+        <a class="button" href="https://gao-yi-fei.github.io/Boncatta/">GitHub Pages</a>
+      </div>
+      <footer>Created by piglin.</footer>
+    </section>
+  </main>
+</body>
+</html>
