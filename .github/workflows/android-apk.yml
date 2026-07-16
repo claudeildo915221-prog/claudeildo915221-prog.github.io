@@ -17,6 +17,9 @@ on:
       - "package-lock.json"
       - ".github/workflows/android-apk.yml"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,6 +54,24 @@ jobs:
           chmod +x android/gradlew
           cd android
           ./gradlew assembleDebug
+
+      - name: Publish latest APK release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.1.${{ github.run_number }}
+        run: |
+          APK_PATH="android/app/build/outputs/apk/debug/app-debug.apk"
+          NOTES_FILE="$(mktemp)"
+          cat > "$NOTES_FILE" <<EOF
+          {"versionCode":${VERSION_CODE},"versionName":"${VERSION_NAME}","commit":"${GITHUB_SHA}","builtAt":"$(date -u +%Y-%m-%dT%H:%M:%SZ)"}
+          EOF
+          if gh release view apk-latest >/dev/null 2>&1; then
+            gh release edit apk-latest --title "Boncatta APK ${VERSION_NAME}" --notes-file "$NOTES_FILE" --latest
+          else
+            gh release create apk-latest --target "$GITHUB_SHA" --title "Boncatta APK ${VERSION_NAME}" --notes-file "$NOTES_FILE" --latest
+          fi
+          gh release upload apk-latest "$APK_PATH#boncatta.apk" --clobber
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

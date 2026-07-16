@@ -82,6 +82,11 @@ input, select { width:100%; padding:0 12px; }
 .login-panel { margin-bottom:14px; }
 .login-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto; gap:10px; align-items:end; }
 .login-message { grid-column:1 / -1; min-height:1.4em; }
+.app-update-panel { margin-bottom:14px; border-color:#c7d7fe; }
+.app-update-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.app-update-head h2 { margin-bottom:4px; }
+.app-update-body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; }
+.app-update-body .action-link { min-height:38px; padding:0 12px; }
 .character-toolbar { margin-bottom:14px; }
 .character-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; padding-bottom:34px; }
 .character-index-grid { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
@@ -324,6 +329,10 @@ pre { max-height:360px; margin:8px 0 0; padding:12px; overflow:auto; border:1px 
   .page-characters .panel-section { padding:10px; }
 
   .page-game .game-shell { padding-bottom:calc(72px + var(--mobile-safe-bottom)); }
+  .page-game .app-update-panel { margin-bottom:10px; }
+  .page-game .app-update-head { padding:9px 10px; }
+  .page-game .app-update-body { grid-template-columns:1fr; gap:8px; padding:10px; }
+  .page-game .app-update-body .action-link { width:100%; }
   .page-game .game-hero { gap:10px; padding:12px; margin-bottom:10px; border-radius:12px; }
   .page-game .game-hero h2 { font-size:1.14rem; }
   .page-game .game-hero p { font-size:.84rem; line-height:1.42; }
@@ -345,6 +354,7 @@ pre { max-height:360px; margin:8px 0 0; padding:12px; overflow:auto; border:1px 
     display:block;
     margin-bottom:10px;
   }
+  .page-game.room-active:not(.battle-active) .app-update-panel,
   .page-game.room-active:not(.battle-active) .lobby-panel,
   .page-game.room-active:not(.battle-active) .room-setup-panel > .panel-head,
   .page-game.room-active:not(.battle-active) .mode-section,
@@ -464,6 +474,7 @@ pre { max-height:360px; margin:8px 0 0; padding:12px; overflow:auto; border:1px 
   .page-game.battle-active header,
   .page-game.battle-active .nav,
   .page-game.battle-active .game-hero,
+  .page-game.battle-active .app-update-panel,
   .page-game.battle-active .login-panel,
   .page-game.battle-active .game-lobby-layout,
   .page-game.battle-active #gameContent > .panel:not(.game-board),

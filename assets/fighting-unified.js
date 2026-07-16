@@ -9,6 +9,7 @@
   const ROOM_HEARTBEAT_MS = 7000;
   const MQTT_BROKER = "wss://broker.emqx.io:8084/mqtt";
   const MQTT_TOPIC = "boncatta/baota/unified/v1/rooms";
+  const UPDATE_API = "https://api.github.com/repos/Boncatta/Boncatta.github.io/releases?per_page=5";
 
   const MODES = {
     duel: {
@@ -70,6 +71,7 @@
     lobbyTimer: null,
     auth: null,
     lobbyStarted: false,
+    appInfo: null,
   };
 
   const ACCOUNTS_KEY = "boncattaAccountsV1";
@@ -137,6 +139,90 @@
       updateNetworkStatus("请先登录暴塔。");
     }
     updateLocks();
+  }
+
+  async function getInstalledAppInfo() {
+    if (app.appInfo) return app.appInfo;
+    const fallback = { versionName: "网页", versionCode: 0, native: false };
+    try {
+      const plugin = window.Capacitor?.Plugins?.App;
+      if (!plugin?.getInfo) {
+        app.appInfo = fallback;
+        return app.appInfo;
+      }
+      const info = await plugin.getInfo();
+      app.appInfo = {
+        versionName: info.version || "未知",
+        versionCode: Number(info.build || 0),
+        native: true,
+      };
+      return app.appInfo;
+    } catch {
+      app.appInfo = fallback;
+      return app.appInfo;
+    }
+  }
+
+  function parseReleaseMeta(release) {
+    const body = String(release?.body || "");
+    const json = body.match(/\{[\s\S]*\}/)?.[0] || "{}";
+    let meta = {};
+    try { meta = JSON.parse(json); } catch { meta = {}; }
+    const apk = (release?.assets || []).find((asset) => asset.name === "boncatta.apk") || (release?.assets || [])[0];
+    return {
+      versionCode: Number(meta.versionCode || 0),
+      versionName: meta.versionName || release?.name || "未知",
+      builtAt: meta.builtAt || release?.published_at || "",
+      apkUrl: apk?.browser_download_url || release?.html_url || "https://github.com/Boncatta/Boncatta.github.io/releases/tag/apk-latest",
+      releaseUrl: release?.html_url || "https://github.com/Boncatta/Boncatta.github.io/releases/tag/apk-latest",
+    };
+  }
+
+  function renderAppVersion(info) {
+    const node = $("appVersionInfo");
+    if (!node) return;
+    node.textContent = info.native
+      ? `当前 APK：${info.versionName} (${info.versionCode || "未知"})`
+      : "当前为网页模式；APK 内会显示安装版本。";
+  }
+
+  async function checkUpdate(manual = true) {
+    const status = $("updateStatus");
+    const link = $("downloadUpdate");
+    if (!status || !link) return;
+    link.hidden = true;
+    if (manual) status.textContent = "正在检查新版 APK...";
+    const current = await getInstalledAppInfo();
+    renderAppVersion(current);
+    try {
+      const response = await fetch(`${UPDATE_API}&t=${Date.now()}`, {
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json" },
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const payload = await response.json();
+      const release = Array.isArray(payload)
+        ? payload.find((item) => item.tag_name === "apk-latest") || payload[0]
+        : payload;
+      if (!release) {
+        status.textContent = "还没有可下载的 APK 发布包，等云端构建完成后再检查。";
+        return;
+      }
+      const latest = parseReleaseMeta(release);
+      if (!latest.versionCode) {
+        status.textContent = "已连接更新源，但没有读到版本号。";
+      } else if (!current.native) {
+        status.textContent = `线上 APK：${latest.versionName} (${latest.versionCode})。网页模式下可直接下载。`;
+      } else if (latest.versionCode > current.versionCode) {
+        status.textContent = `发现新版：${latest.versionName} (${latest.versionCode})，当前为 ${current.versionName} (${current.versionCode || "未知"})。`;
+      } else {
+        status.textContent = `已是最新版：${current.versionName} (${current.versionCode || "未知"})。`;
+      }
+      link.href = latest.apkUrl;
+      link.hidden = false;
+    } catch (error) {
+      status.textContent = `检查失败：${error.message || error}`;
+    }
   }
 
   async function login() {
@@ -1211,6 +1297,15 @@
   }
 
   function bindEvents() {
+    $("checkUpdate")?.addEventListener("click", () => checkUpdate(true));
+    $("downloadUpdate")?.addEventListener("click", (event) => {
+      const href = event.currentTarget.href;
+      if (!href || href.endsWith("#")) return;
+      if (window.Capacitor?.isNativePlatform?.()) {
+        event.preventDefault();
+        window.open(href, "_system");
+      }
+    });
     $("loginButton").addEventListener("click", login);
     ["loginName", "loginPassword"].forEach((id) => {
       $(id).addEventListener("keydown", (event) => {
@@ -1259,6 +1354,8 @@
     bindEvents();
     restoreSession();
     if (app.auth?.username) $("loginName").value = app.auth.username;
+    getInstalledAppInfo().then(renderAppVersion);
+    window.setTimeout(() => checkUpdate(false), 600);
     applyAuthState();
   }
 

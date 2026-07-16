@@ -13,6 +13,20 @@
   <main class="game-shell">
     <div class="sr-only" id="networkStatus" aria-live="polite">正在连接大厅...</div>
 
+    <section class="panel app-update-panel" id="appUpdatePanel">
+      <div class="panel-head app-update-head">
+        <div>
+          <h2>应用更新</h2>
+          <div class="small" id="appVersionInfo">正在读取版本...</div>
+        </div>
+        <button type="button" id="checkUpdate">检查</button>
+      </div>
+      <div class="panel-section app-update-body">
+        <div class="small" id="updateStatus">可在应用内检查并下载新版 APK。</div>
+        <a class="game-primary action-link" id="downloadUpdate" href="#" target="_blank" rel="noreferrer" hidden>下载新版 APK</a>
+      </div>
+    </section>
+
     <section class="panel login-panel" id="loginPanel">
       <div class="panel-head">
         <h2>登录暴塔</h2>
